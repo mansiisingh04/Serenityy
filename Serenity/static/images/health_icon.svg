@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="100px" height="100px" viewBox="0 0 100 100" version="1.1" xmlns="http://www.w3.org/2000/svg">
+    <title>Senior Health Companion Icon</title>
+    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle fill="#E0F2FE" cx="50" cy="50" r="50"></circle>
+        <path d="M50,20 C60.4934,20 69,28.5066 69,39 C69,46.6049 64.6392,53.1283 58.2662,56.3573 C57.5802,56.7019 57.0106,57.2853 56.7207,58.0127 L54.5,63 L45.5,63 L43.2793,58.0127 C42.9894,57.2853 42.4198,56.7019 41.7338,56.3573 C35.3608,53.1283 31,46.6049 31,39 C31,28.5066 39.5066,20 50,20 Z" fill="#0EA5E9" opacity="0.9"></path>
+        <path d="M68,70 L68,75 C68,76.6568542 66.6568542,78 65,78 L35,78 C33.3431458,78 32,76.6568542 32,75 L32,70 C32,67.2385763 34.2385763,65 37,65 L63,65 C65.7614237,65 68,67.2385763 68,70 Z" fill="#0284C7"></path>
+        <rect fill="#FFFFFF" x="45" y="30" width="10" height="20" rx="2"></rect>
+        <rect fill="#FFFFFF" x="40" y="35" width="20" height="10" rx="2"></rect>
+        <rect fill="#FFFFFF" opacity="0.9" x="37" y="69" width="26" height="5" rx="2"></rect>
+    </g>
+</svg>

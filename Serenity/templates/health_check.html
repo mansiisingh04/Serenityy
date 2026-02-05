@@ -1,0 +1,394 @@
+{% extends "base.html" %}
+
+{% block title %}Health Check - Senior Health Companion{% endblock %}
+
+{% block content %}
+<div class="bg-white shadow overflow-hidden sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6">
+        <h2 class="text-lg leading-6 font-medium text-gray-900">Daily Health Check</h2>
+        <p class="mt-1 max-w-2xl text-sm text-gray-500">Track how you're feeling today</p>
+    </div>
+    <div class="border-t border-gray-200 px-4 py-5 sm:p-6">
+        <form id="health-check-form" class="space-y-6">
+            <div>
+                <label class="block text-lg font-medium text-gray-700">How are you feeling today?</label>
+                <div class="mt-4 grid grid-cols-5 gap-4">
+                    <button type="button" class="mood-option flex flex-col items-center p-4 border rounded-lg hover:border-primary-500 focus:outline-none" data-mood="great">
+                        <span class="text-4xl mb-2">😃</span>
+                        <span class="text-sm font-medium text-gray-900">Great</span>
+                    </button>
+                    <button type="button" class="mood-option flex flex-col items-center p-4 border rounded-lg hover:border-primary-500 focus:outline-none" data-mood="good">
+                        <span class="text-4xl mb-2">🙂</span>
+                        <span class="text-sm font-medium text-gray-900">Good</span>
+                    </button>
+                    <button type="button" class="mood-option flex flex-col items-center p-4 border rounded-lg hover:border-primary-500 focus:outline-none" data-mood="okay">
+                        <span class="text-4xl mb-2">😐</span>
+                        <span class="text-sm font-medium text-gray-900">Okay</span>
+                    </button>
+                    <button type="button" class="mood-option flex flex-col items-center p-4 border rounded-lg hover:border-primary-500 focus:outline-none" data-mood="bad">
+                        <span class="text-4xl mb-2">🙁</span>
+                        <span class="text-sm font-medium text-gray-900">Bad</span>
+                    </button>
+                    <button type="button" class="mood-option flex flex-col items-center p-4 border rounded-lg hover:border-primary-500 focus:outline-none" data-mood="terrible">
+                        <span class="text-4xl mb-2">😔</span>
+                        <span class="text-sm font-medium text-gray-900">Terrible</span>
+                    </button>
+                </div>
+                <input type="hidden" name="mood" id="mood-input" required>
+            </div>
+
+            <div class="border-t border-gray-200 pt-6">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Additional Health Parameters</h3>
+                
+                <div class="mb-6">
+                    <label for="energy-level" class="block text-md font-medium text-gray-700">Energy Level</label>
+                    <div class="mt-2">
+                        <input type="range" id="energy-level" name="energy_level" min="0" max="10" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-gray-600 px-2 mt-1">
+                            <span>0 (Exhausted)</span>
+                            <span class="text-right">10 (Fully Energized)</span>
+                        </div>
+                        <div class="text-center mt-1">
+                            <span id="energy-display" class="text-sm font-medium">5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mb-6">
+                    <label for="sleep-quality" class="block text-md font-medium text-gray-700">Sleep Quality</label>
+                    <div class="mt-2">
+                        <div class="flex space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="sleep_quality" value="poor" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">Poor</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="sleep_quality" value="fair" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">Fair</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="sleep_quality" value="good" class="form-radio h-5 w-5 text-primary-600" checked>
+                                <span class="ml-2 text-sm text-gray-700">Good</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="sleep_quality" value="excellent" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">Excellent</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="appetite" class="block text-md font-medium text-gray-700">Appetite</label>
+                    <div class="mt-2">
+                        <div class="flex space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="appetite" value="no_appetite" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">No Appetite</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="appetite" value="normal" class="form-radio h-5 w-5 text-primary-600" checked>
+                                <span class="ml-2 text-sm text-gray-700">Normal</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="appetite" value="increased" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">Increased</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="mobility" class="block text-md font-medium text-gray-700">Mobility / Movement</label>
+                    <div class="mt-2">
+                        <div class="flex space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="mobility" value="easy" class="form-radio h-5 w-5 text-primary-600" checked>
+                                <span class="ml-2 text-sm text-gray-700">Easy</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="mobility" value="slightly_difficult" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">Slightly Difficult</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="mobility" value="very_difficult" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">Very Difficult</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="heart-rate" class="block text-md font-medium text-gray-700">Heart Rate</label>
+                    <div class="mt-2 relative rounded-md shadow-sm max-w-xs">
+                        <input type="text" name="heart_rate" id="heart-rate" class="focus:ring-primary-500 focus:border-primary-500 block w-full pr-12 sm:text-sm border-gray-300 rounded-md" placeholder="e.g., 72">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <span class="text-gray-500 sm:text-sm">bpm</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="breathing" class="block text-md font-medium text-gray-700">Breathing Difficulty</label>
+                    <div class="mt-2">
+                        <div class="flex space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="breathing" value="none" class="form-radio h-5 w-5 text-primary-600" checked>
+                                <span class="ml-2 text-sm text-gray-700">None</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="breathing" value="mild" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">Mild</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="breathing" value="moderate" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">Moderate</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="breathing" value="severe" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">Severe</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="hydration-level" class="block text-md font-medium text-gray-700">Hydration</label>
+                    <div class="mt-2">
+                        <input type="range" id="hydration-level" name="hydration_level" min="0" max="10" value="5" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-xs text-gray-600 px-2 mt-1">
+                            <span>0 (Dehydrated)</span>
+                            <span class="text-right">10 (Fully Hydrated)</span>
+                        </div>
+                        <div class="text-center mt-1">
+                            <span id="hydration-display" class="text-sm font-medium">5</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label for="medication-taken" class="block text-md font-medium text-gray-700">Medication Taken?</label>
+                    <div class="mt-2">
+                        <div class="flex space-x-4">
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="medication_taken" value="yes" class="form-radio h-5 w-5 text-primary-600" checked>
+                                <span class="ml-2 text-sm text-gray-700">Yes</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="medication_taken" value="no" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">No</span>
+                            </label>
+                            <label class="inline-flex items-center">
+                                <input type="radio" name="medication_taken" value="missed_one" class="form-radio h-5 w-5 text-primary-600">
+                                <span class="ml-2 text-sm text-gray-700">Missed one</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <label for="notes" class="block text-lg font-medium text-gray-700">Any additional notes?</label>
+                <div class="mt-1">
+                    <textarea id="notes" name="notes" rows="3" class="shadow-sm focus:ring-primary-500 focus:border-primary-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md" placeholder="Describe how you're feeling in more detail..."></textarea>
+                </div>
+            </div>
+
+            <div class="flex justify-center">
+                <button type="submit" id="submit-check" class="btn-primary py-3 px-8 text-lg">
+                    <i class="fas fa-heart-pulse mr-2"></i> Submit Health Check
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Health Log History -->
+<div class="mt-8 bg-white shadow overflow-hidden sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
+        <div>
+            <h2 class="text-lg leading-6 font-medium text-gray-900">Health Check History</h2>
+            <p class="mt-1 max-w-2xl text-sm text-gray-500">Your recent health logs</p>
+        </div>
+    </div>
+    <div class="border-t border-gray-200">
+        {% if health_logs %}
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mood</th>
+                            <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        {% for log in health_logs %}
+                        <tr>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {{ log.timestamp.strftime('%b %d, %Y %I:%M %p') }}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                {% if log.mood == 'great' %}
+                                    <span class="text-green-500">😃 Great</span>
+                                {% elif log.mood == 'good' %}
+                                    <span class="text-blue-500">🙂 Good</span>
+                                {% elif log.mood == 'okay' %}
+                                    <span class="text-yellow-500">😐 Okay</span>
+                                {% elif log.mood == 'bad' %}
+                                    <span class="text-orange-500">🙁 Bad</span>
+                                {% else %}
+                                    <span class="text-red-500">😔 Terrible</span>
+                                {% endif %}
+                            </td>
+                            <td class="px-6 py-4 text-sm text-gray-900">
+                                <div class="max-w-xs truncate">{{ log.notes or 'No notes' }}</div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% else %}
+            <div class="text-center py-12">
+                <i class="fas fa-calendar-check text-gray-300 text-6xl mb-4"></i>
+                <h3 class="text-lg leading-6 font-medium text-gray-900">No health logs yet</h3>
+                <p class="mt-2 text-sm text-gray-500">
+                    Complete the health check form above to start tracking your well-being
+                </p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Success Modal -->
+<div id="success-modal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+    <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
+        <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                <div class="sm:flex sm:items-start">
+                    <div class="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-green-100 sm:mx-0 sm:h-10 sm:w-10">
+                        <i class="fas fa-check text-green-600"></i>
+                    </div>
+                    <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">Health Check Recorded</h3>
+                        <div class="mt-2">
+                            <p class="text-sm text-gray-500">
+                                Thank you for checking in! Your health information has been saved.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button type="button" class="close-success-modal w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-primary-600 text-base font-medium text-white hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 sm:ml-3 sm:w-auto sm:text-sm">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Mood selection
+        const moodOptions = document.querySelectorAll('.mood-option');
+        const moodInput = document.getElementById('mood-input');
+        
+        moodOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // Reset all selections
+                moodOptions.forEach(opt => opt.classList.remove('border-primary-500', 'bg-primary-50', 'ring-2', 'ring-primary-500'));
+                
+                // Set selected option
+                this.classList.add('border-primary-500', 'bg-primary-50', 'ring-2', 'ring-primary-500');
+                moodInput.value = this.dataset.mood;
+            });
+        });
+
+        // Energy level display
+        const energyLevel = document.getElementById('energy-level');
+        const energyDisplay = document.getElementById('energy-display');
+        
+        energyLevel.addEventListener('input', function() {
+            energyDisplay.textContent = this.value;
+        });
+
+        // Hydration level display
+        const hydrationLevel = document.getElementById('hydration-level');
+        const hydrationDisplay = document.getElementById('hydration-display');
+        
+        hydrationLevel.addEventListener('input', function() {
+            hydrationDisplay.textContent = this.value;
+        });
+
+        // Health check form submission
+        const healthCheckForm = document.getElementById('health-check-form');
+        const successModal = document.getElementById('success-modal');
+        
+        healthCheckForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            if (!moodInput.value) {
+                alert('Please select your mood.');
+                return;
+            }
+            
+            const formData = {
+                mood: moodInput.value,
+                energy_level: energyLevel.value,
+                sleep_quality: document.querySelector('input[name="sleep_quality"]:checked').value,
+                appetite: document.querySelector('input[name="appetite"]:checked').value,
+                mobility: document.querySelector('input[name="mobility"]:checked').value,
+                heart_rate: document.getElementById('heart-rate').value,
+                breathing: document.querySelector('input[name="breathing"]:checked').value,
+                hydration_level: hydrationLevel.value,
+                medication_taken: document.querySelector('input[name="medication_taken"]:checked').value,
+                notes: document.getElementById('notes').value
+            };
+            
+            // Submit data to server
+            fetch('/submit_health_check', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Show success modal
+                    successModal.classList.remove('hidden');
+                    
+                    // Reset form
+                    healthCheckForm.reset();
+                    moodOptions.forEach(opt => opt.classList.remove('border-primary-500', 'bg-primary-50', 'ring-2', 'ring-primary-500'));
+                    energyLevel.value = 5;
+                    hydrationLevel.value = 5;
+                    energyDisplay.textContent = '5';
+                    hydrationDisplay.textContent = '5';
+                    
+                    // Reload page after a short delay
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was an error submitting your health check. Please try again.');
+            });
+        });
+
+        // Close success modal
+        document.querySelector('.close-success-modal').addEventListener('click', function() {
+            successModal.classList.add('hidden');
+        });
+    });
+</script>
+{% endblock %}

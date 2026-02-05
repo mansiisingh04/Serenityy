@@ -1,0 +1,702 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Serenity{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main content: Features and introduction -->
+    <div class="lg:col-span-2 space-y-6">
+        <!-- Welcome section with animation -->
+        <div class="bg-white shadow rounded-lg p-6 transform transition duration-500 hover:shadow-lg">
+            <div class="flex items-center space-x-3">
+                <div class="flex-shrink-0">
+                    <div class="h-12 w-12 rounded-full bg-primary-600 flex items-center justify-center text-white text-lg font-bold pulse-animation">
+                        <i class="fas fa-heart-pulse"></i>
+                    </div>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <h2 class="text-2xl font-bold text-gray-900 truncate animate__animated animate__fadeIn">
+                        Welcome to Serenity!
+                    </h2>
+                    <p class="text-sm text-gray-500">
+                        Your personal health companion
+                    </p>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div class="p-4 bg-yellow-50 rounded-md transition-all duration-300 hover:bg-yellow-100">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-lightbulb text-yellow-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-yellow-800">Daily Health Tip</h3>
+                            <div class="mt-2 text-sm text-yellow-700">
+                                <p id="tip-content">{{ daily_tip }}</p>
+                            </div>
+                            <div class="mt-2 flex space-x-2">
+                                <button type="button" onclick="speak(document.getElementById('tip-content').innerText)" class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors">
+                                    <i class="fas fa-volume-up mr-1"></i> Read Aloud
+                                </button>
+                                <button type="button" onclick="getNewTip()" class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors">
+                                    <i class="fas fa-sync-alt mr-1"></i> New Tip
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Interactive Features section -->
+        <div class="bg-white shadow rounded-lg p-6 transform transition duration-500 hover:shadow-lg">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">How Serenity Helps You</h3>
+            
+            <div class="space-y-6">
+                <div id="feature-1" class="flex feature-item cursor-pointer transform transition hover:translate-x-1" onclick="showFeatureDetails('medication')">
+                    <div class="flex-shrink-0">
+                        <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="text-md font-medium text-gray-900">Medication Management</h4>
+                        <p class="mt-1 text-sm text-gray-500">Keep track of your medications, receive reminders, and never miss a dose again.</p>
+                    </div>
+                </div>
+                
+                <div id="feature-2" class="flex feature-item cursor-pointer transform transition hover:translate-x-1" onclick="showFeatureDetails('health')">
+                    <div class="flex-shrink-0">
+                        <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                            <i class="fas fa-heart-pulse"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="text-md font-medium text-gray-900">Health Tracking</h4>
+                        <p class="mt-1 text-sm text-gray-500">Monitor your health vitals, track symptoms, and maintain a comprehensive health journal.</p>
+                    </div>
+                </div>
+                
+                <div id="feature-3" class="flex feature-item cursor-pointer transform transition hover:translate-x-1" onclick="showFeatureDetails('assistant')">
+                    <div class="flex-shrink-0">
+                        <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="text-md font-medium text-gray-900">AI Health Assistant</h4>
+                        <p class="mt-1 text-sm text-gray-500">Chat with Serenity, your personal AI assistant that provides health tips and companionship.</p>
+                    </div>
+                </div>
+                
+                <div id="feature-4" class="flex feature-item cursor-pointer transform transition hover:translate-x-1" onclick="showFeatureDetails('emergency')">
+                    <div class="flex-shrink-0">
+                        <div class="h-10 w-10 rounded-full bg-primary-100 flex items-center justify-center text-primary-600">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                    </div>
+                    <div class="ml-4">
+                        <h4 class="text-md font-medium text-gray-900">Emergency Assistance</h4>
+                        <p class="mt-1 text-sm text-gray-500">Quick access to emergency contacts and one-click help requests when you need it most.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feature details sections -->
+            <div id="feature-details" class="mt-6 p-4 bg-gray-50 rounded-lg border border-gray-200 hidden">
+                <div id="feature-detail-content"></div>
+                <button type="button" onclick="hideFeatureDetails()" class="mt-3 inline-flex items-center px-3 py-1.5 border border-gray-300 shadow-sm text-xs font-medium rounded text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
+                    <i class="fas fa-chevron-up mr-1"></i> Close
+                </button>
+            </div>
+            
+            <div class="mt-6">
+                <a href="{{ url_for('authorize') }}" class="inline-flex items-center px-4 py-2 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-primary-600 hover:bg-primary-700 transition-colors animate-pulse-slow">
+                    <i class="fas fa-sign-in-alt mr-2"></i> Sign in to get started
+                </a>
+            </div>
+        </div>
+
+        <!-- Testimonials with carousel -->
+        <div class="bg-white shadow rounded-lg p-6 transform transition duration-500 hover:shadow-lg">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">What Our Users Say</h3>
+            
+            <div id="testimonial-carousel" class="relative">
+                <div class="testimonial-slide">
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <span class="text-gray-600">MJ</span>
+                                </div>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Margaret Johnson</p>
+                                <div class="mt-1 flex items-center">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                </div>
+                                <p class="mt-1 text-sm text-gray-500">"Serenity has changed my life! I never forget my medications now, and the chat feature keeps me company."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-slide hidden">
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <span class="text-gray-600">RT</span>
+                                </div>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Robert Thomas</p>
+                                <div class="mt-1 flex items-center">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                </div>
+                                <p class="mt-1 text-sm text-gray-500">"The emergency feature gave me peace of mind when living alone. Highly recommended!"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-slide hidden">
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0">
+                                <div class="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center">
+                                    <span class="text-gray-600">EL</span>
+                                </div>
+                            </div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium text-gray-900">Evelyn Lopez</p>
+                                <div class="mt-1 flex items-center">
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                    <i class="fas fa-star text-yellow-400"></i>
+                                </div>
+                                <p class="mt-1 text-sm text-gray-500">"The health tracking has helped me communicate better with my doctor. I love how easy it is to use!"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Carousel controls -->
+                <div class="flex justify-center mt-4 space-x-2">
+                    <button class="carousel-dot active" data-slide="0"></button>
+                    <button class="carousel-dot" data-slide="1"></button>
+                    <button class="carousel-dot" data-slide="2"></button>
+                </div>
+                
+                <button class="absolute top-1/2 left-0 transform -translate-y-1/2 -ml-4 text-primary-600 carousel-prev">
+                    <i class="fas fa-chevron-left text-xl"></i>
+                </button>
+                <button class="absolute top-1/2 right-0 transform -translate-y-1/2 -mr-4 text-primary-600 carousel-next">
+                    <i class="fas fa-chevron-right text-xl"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar: Sign-in and information -->
+    <div class="space-y-6">
+        <!-- Sign in section with animation -->
+        <div class="bg-white shadow rounded-lg p-6 transform transition duration-500 hover:shadow-lg">
+            <h3 class="text-lg font-medium text-gray-900">Sign In</h3>
+            <div class="mt-4 space-y-3">
+                <p class="text-sm text-gray-600">Sign in to access your personalized Serenity dashboard and all features.</p>
+                <div class="pt-3">
+                    <a href="{{ url_for('authorize') }}" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 items-center transform transition hover:scale-105">
+                        <svg class="w-5 h-5 mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <g transform="matrix(1, 0, 0, 1, 27.009001, -39.238998)">
+                                <path fill="#4285F4" d="M -3.264 51.509 C -3.264 50.719 -3.334 49.969 -3.454 49.239 L -14.754 49.239 L -14.754 53.749 L -8.284 53.749 C -8.574 55.229 -9.424 56.479 -10.684 57.329 L -10.684 60.329 L -6.824 60.329 C -4.564 58.239 -3.264 55.159 -3.264 51.509 Z" />
+                                <path fill="#34A853" d="M -14.754 63.239 C -11.514 63.239 -8.804 62.159 -6.824 60.329 L -10.684 57.329 C -11.764 58.049 -13.134 58.489 -14.754 58.489 C -17.884 58.489 -20.534 56.379 -21.484 53.529 L -25.464 53.529 L -25.464 56.619 C -23.494 60.539 -19.444 63.239 -14.754 63.239 Z" />
+                                <path fill="#FBBC05" d="M -21.484 53.529 C -21.734 52.809 -21.864 52.039 -21.864 51.239 C -21.864 50.439 -21.724 49.669 -21.484 48.949 L -21.484 45.859 L -25.464 45.859 C -26.284 47.479 -26.754 49.299 -26.754 51.239 C -26.754 53.179 -26.284 54.999 -25.464 56.619 L -21.484 53.529 Z" />
+                                <path fill="#EA4335" d="M -14.754 43.989 C -12.984 43.989 -11.404 44.599 -10.154 45.789 L -6.734 42.369 C -8.804 40.429 -11.514 39.239 -14.754 39.239 C -19.444 39.239 -23.494 41.939 -25.464 45.859 L -21.484 48.949 C -20.534 46.099 -17.884 43.989 -14.754 43.989 Z" />
+                            </g>
+                        </svg>
+                        Sign in with Google
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Interactive Getting Started -->
+        <div class="bg-white shadow rounded-lg p-6 transform transition duration-500 hover:shadow-lg">
+            <h3 class="text-lg font-medium text-gray-900">Getting Started</h3>
+            <div class="mt-4">
+                <div class="space-y-4">
+                    <div class="step-item active" data-step="1">
+                        <div class="flex items-center">
+                            <div class="step-number">1</div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium">Sign in with your Google account</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-item" data-step="2">
+                        <div class="flex items-center">
+                            <div class="step-number">2</div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium">Set up your medications and dosage schedule</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-item" data-step="3">
+                        <div class="flex items-center">
+                            <div class="step-number">3</div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium">Add your emergency contacts</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-item" data-step="4">
+                        <div class="flex items-center">
+                            <div class="step-number">4</div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium">Start tracking your health metrics</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="step-item" data-step="5">
+                        <div class="flex items-center">
+                            <div class="step-number">5</div>
+                            <div class="ml-3">
+                                <p class="text-sm font-medium">Chat with Serenity for health tips and companionship</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Privacy Note with interactive elements -->
+        <div class="bg-white shadow rounded-lg p-6 transform transition duration-500 hover:shadow-lg">
+            <h3 class="text-lg font-medium text-gray-900">Privacy & Security</h3>
+            <div class="mt-4">
+                <p class="text-sm text-gray-600">Your health data is private and secure. We use industry-standard encryption and never share your information with third parties.</p>
+                <div class="mt-4">
+                    <div class="security-feature" onclick="showSecurityInfo('encryption')">
+                        <div class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded-md">
+                            <i class="fas fa-lock text-primary-600 mr-2"></i>
+                            <span class="text-sm font-medium text-gray-900">End-to-end encryption</span>
+                            <i class="fas fa-chevron-down ml-auto text-gray-400 text-xs"></i>
+                        </div>
+                        <div class="security-info hidden ml-7 mt-2 text-xs text-gray-500">
+                            All your data is encrypted in transit and at rest, ensuring that only you and authorized healthcare providers can access it.
+                        </div>
+                    </div>
+                    <div class="security-feature" onclick="showSecurityInfo('hipaa')">
+                        <div class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded-md">
+                            <i class="fas fa-shield-alt text-primary-600 mr-2"></i>
+                            <span class="text-sm font-medium text-gray-900">HIPAA compliant</span>
+                            <i class="fas fa-chevron-down ml-auto text-gray-400 text-xs"></i>
+                        </div>
+                        <div class="security-info hidden ml-7 mt-2 text-xs text-gray-500">
+                            Our platform adheres to all Health Insurance Portability and Accountability Act standards to protect your health information.
+                        </div>
+                    </div>
+                    <div class="security-feature" onclick="showSecurityInfo('ownership')">
+                        <div class="flex items-center cursor-pointer hover:bg-gray-50 p-2 rounded-md">
+                            <i class="fas fa-user-shield text-primary-600 mr-2"></i>
+                            <span class="text-sm font-medium text-gray-900">Your data belongs to you</span>
+                            <i class="fas fa-chevron-down ml-auto text-gray-400 text-xs"></i>
+                        </div>
+                        <div class="security-info hidden ml-7 mt-2 text-xs text-gray-500">
+                            You maintain full ownership of your data and can download or delete it at any time through your account settings.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Demo Video Section has been removed -->
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Initialize the carousel
+        initCarousel();
+        
+        // Initialize the interactive steps
+        initSteps();
+        
+        // Add animations for better visual appeal
+        addAnimations();
+    });
+    
+    // Speech synthesis function
+    function speak(text) {
+        if ('speechSynthesis' in window) {
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.rate = 0.9; // Slightly slower for senior users
+            utterance.pitch = 1;
+            utterance.volume = 1;
+            speechSynthesis.speak(utterance);
+        }
+    }
+    
+    // Feature detail toggle functions
+    function showFeatureDetails(featureId) {
+        const detailsDiv = document.getElementById('feature-details');
+        const contentDiv = document.getElementById('feature-detail-content');
+        
+        // Set content based on feature id
+        if (featureId === 'medication') {
+            contentDiv.innerHTML = `
+                <h4 class="text-md font-medium text-gray-900 mb-2">Medication Management</h4>
+                <div class="text-sm text-gray-600 space-y-2">
+                    <p>Our medication management system helps you:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Track all your medications in one place</li>
+                        <li>Set up reminders for when to take each dose</li>
+                        <li>Record when you've taken your medication</li>
+                        <li>Get alerts for low supplies and refills</li>
+                        <li>Share your medication list with healthcare providers</li>
+                    </ul>
+                    <div class="mt-2">
+                        <img src="https://placehold.co/600x200" alt="Medication Management Screenshot" class="rounded-md w-full">
+                    </div>
+                </div>
+            `;
+        } else if (featureId === 'health') {
+            contentDiv.innerHTML = `
+                <h4 class="text-md font-medium text-gray-900 mb-2">Health Tracking</h4>
+                <div class="text-sm text-gray-600 space-y-2">
+                    <p>Our health tracking tools allow you to:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Record blood pressure, weight, and other vitals</li>
+                        <li>Track symptoms and how you're feeling each day</li>
+                        <li>Monitor trends in your health over time</li>
+                        <li>Create reports to share with your doctor</li>
+                        <li>Set health goals and track your progress</li>
+                    </ul>
+                    <div class="mt-2">
+                        <img src="https://placehold.co/600x200" alt="Health Tracking Screenshot" class="rounded-md w-full">
+                    </div>
+                </div>
+            `;
+        } else if (featureId === 'assistant') {
+            contentDiv.innerHTML = `
+                <h4 class="text-md font-medium text-gray-900 mb-2">AI Health Assistant</h4>
+                <div class="text-sm text-gray-600 space-y-2">
+                    <p>Our AI assistant, Serenity, can:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>Answer general health questions</li>
+                        <li>Provide daily health tips specific to your needs</li>
+                        <li>Engage in friendly conversation for companionship</li>
+                        <li>Remind you about upcoming appointments</li>
+                        <li>Help with basic troubleshooting of the app</li>
+                    </ul>
+                    <div class="mt-2">
+                        <img src="https://placehold.co/600x200" alt="AI Assistant Screenshot" class="rounded-md w-full">
+                    </div>
+                </div>
+            `;
+        } else if (featureId === 'emergency') {
+            contentDiv.innerHTML = `
+                <h4 class="text-md font-medium text-gray-900 mb-2">Emergency Assistance</h4>
+                <div class="text-sm text-gray-600 space-y-2">
+                    <p>Our emergency features provide:</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li>One-touch emergency contact calling</li>
+                        <li>Automatic sharing of your location in emergencies</li>
+                        <li>Quick access to your medical information for EMTs</li>
+                        <li>Fall detection (with compatible devices)</li>
+                        <li>Regular check-ins if enabled</li>
+                    </ul>
+                    <div class="mt-2">
+                        <img src="https://placehold.co/600x200" alt="Emergency Features Screenshot" class="rounded-md w-full">
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Show the details
+        detailsDiv.classList.remove('hidden');
+        
+        // Highlight the selected feature
+        document.querySelectorAll('.feature-item').forEach(item => {
+            item.classList.remove('bg-gray-50');
+        });
+        document.getElementById('feature-' + (featureId === 'medication' ? '1' : featureId === 'health' ? '2' : featureId === 'assistant' ? '3' : '4')).classList.add('bg-gray-50');
+        
+        // Scroll to the details
+        detailsDiv.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+    
+    function hideFeatureDetails() {
+        const detailsDiv = document.getElementById('feature-details');
+        detailsDiv.classList.add('hidden');
+        
+        // Remove highlighting
+        document.querySelectorAll('.feature-item').forEach(item => {
+            item.classList.remove('bg-gray-50');
+        });
+    }
+    
+    // Testimonial carousel
+    function initCarousel() {
+        const slides = document.querySelectorAll('.testimonial-slide');
+        const dots = document.querySelectorAll('.carousel-dot');
+        const prevBtn = document.querySelector('.carousel-prev');
+        const nextBtn = document.querySelector('.carousel-next');
+        let currentSlide = 0;
+        
+        function showSlide(index) {
+            slides.forEach(slide => slide.classList.add('hidden'));
+            dots.forEach(dot => dot.classList.remove('active'));
+            
+            slides[index].classList.remove('hidden');
+            dots[index].classList.add('active');
+            currentSlide = index;
+        }
+        
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                showSlide(index);
+            });
+        });
+        
+        prevBtn.addEventListener('click', () => {
+            const newIndex = (currentSlide - 1 + slides.length) % slides.length;
+            showSlide(newIndex);
+        });
+        
+        nextBtn.addEventListener('click', () => {
+            const newIndex = (currentSlide + 1) % slides.length;
+            showSlide(newIndex);
+        });
+        
+        // Auto advance slides every 5 seconds
+        setInterval(() => {
+            const newIndex = (currentSlide + 1) % slides.length;
+            showSlide(newIndex);
+        }, 5000);
+    }
+    
+    // Getting Started Steps
+    function initSteps() {
+        const steps = document.querySelectorAll('.step-item');
+        let currentStep = 0;
+        
+        function activateStep(index) {
+            steps.forEach((step, i) => {
+                if (i <= index) {
+                    step.classList.add('active');
+                } else {
+                    step.classList.remove('active');
+                }
+            });
+        }
+        
+        // Initial state
+        activateStep(0);
+        
+        // Progress through steps every 3 seconds
+        setInterval(() => {
+            currentStep = (currentStep + 1) % steps.length;
+            activateStep(currentStep);
+        }, 3000);
+    }
+    
+    // Security info toggle
+    function showSecurityInfo(id) {
+        const elements = document.querySelectorAll('.security-feature');
+        
+        elements.forEach(el => {
+            const infoDiv = el.querySelector('.security-info');
+            const icon = el.querySelector('.fa-chevron-down');
+            
+            if (el.getAttribute('onclick').includes(id)) {
+                if (infoDiv.classList.contains('hidden')) {
+                    infoDiv.classList.remove('hidden');
+                    icon.classList.add('fa-chevron-up');
+                    icon.classList.remove('fa-chevron-down');
+                } else {
+                    infoDiv.classList.add('hidden');
+                    icon.classList.add('fa-chevron-down');
+                    icon.classList.remove('fa-chevron-up');
+                }
+            }
+        });
+    }
+    
+    // Get a new daily tip
+    function getNewTip() {
+        const tips = [
+            "Stay hydrated! Aim to drink at least 8 glasses of water today.",
+            "Try taking a short walk after meals to aid digestion and improve circulation.",
+            "Remember to take medications with food unless directed otherwise by your doctor.",
+            "Practice deep breathing for 5 minutes to help reduce stress and anxiety.",
+            "Set a reminder to stand up and stretch every hour if you're sitting for long periods.",
+            "Good hand hygiene is essential - wash your hands frequently for at least 20 seconds.",
+            "Eat colorful fruits and vegetables to ensure you're getting a variety of nutrients.",
+            "Call or video chat with a loved one today - social connections boost mental health.",
+            "Consider using a pill organizer to help keep track of your medications.",
+            "Take time to do something you enjoy today - mental health is just as important as physical health."
+        ];
+        
+        const tipContent = document.getElementById('tip-content');
+        let newTip = tips[Math.floor(Math.random() * tips.length)];
+        
+        // Make sure we don't get the same tip twice in a row
+        while (newTip === tipContent.innerText && tips.length > 1) {
+            newTip = tips[Math.floor(Math.random() * tips.length)];
+        }
+        
+        // Animate the tip change
+        tipContent.style.opacity = '0';
+        setTimeout(() => {
+            tipContent.innerText = newTip;
+            tipContent.style.opacity = '1';
+        }, 300);
+    }
+    
+    // Video modal functions
+    function showVideoModal() {
+        document.getElementById('video-modal').classList.remove('hidden');
+    }
+    
+    function hideVideoModal() {
+        document.getElementById('video-modal').classList.add('hidden');
+    }
+    
+    // Add animations for visual appeal
+    function addAnimations() {
+        // Animate elements as they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('animate-fadeIn');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.bg-white').forEach(el => {
+            observer.observe(el);
+        });
+    }
+</script>
+
+<style>
+    /* Additional styles for the enhanced public dashboard */
+    .pulse-animation {
+        animation: pulse 2s infinite;
+    }
+    
+    @keyframes pulse {
+        0% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+        100% { transform: scale(1); }
+    }
+    
+    .animate-pulse-slow {
+        animation: pulseSlow 3s infinite;
+    }
+    
+    @keyframes pulseSlow {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.8; }
+    }
+    
+    .animate-fadeIn {
+        animation: fadeIn 0.5s ease-out;
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    /* Carousel styling */
+    .carousel-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background-color: #E5E7EB;
+        border: none;
+        cursor: pointer;
+    }
+    
+    .carousel-dot.active {
+        background-color: #60A5FA;
+    }
+    
+    /* Step styling */
+    .step-number {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background-color: #E5E7EB;
+        color: #6B7280;
+        font-size: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+    
+    .step-item.active .step-number {
+        background-color: #60A5FA;
+        color: white;
+    }
+    
+    /* Make feature items more interactive */
+    .feature-item {
+        border-radius: 0.375rem;
+        transition: all 0.2s;
+        padding: 0.5rem;
+    }
+    
+    .feature-item:hover {
+        background-color: #F9FAFB;
+    }
+    
+    /* Aspect ratio for video placeholder */
+    .aspect-w-16 {
+        position: relative;
+        padding-bottom: 56.25%; /* 16:9 aspect ratio */
+        height: 0;
+    }
+    
+    .aspect-w-16 > * {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 0;
+    }
+    
+    /* Security features */
+    .security-feature {
+        transition: all 0.3s;
+        margin-bottom: 0.5rem;
+    }
+    
+    .security-info {
+        animation: slideDown 0.3s ease-out;
+    }
+    
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+</style>
+{% endblock %}

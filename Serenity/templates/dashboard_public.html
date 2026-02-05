@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Welcome to Senior Health Companion{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main content: Welcome and daily tips -->
+    <div class="lg:col-span-2 space-y-6">
+        <!-- Welcome section -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <div class="flex items-center space-x-3">
+                <div class="flex-shrink-0">
+                    <div class="h-12 w-12 rounded-full bg-primary-600 flex items-center justify-center text-white text-lg font-bold">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <h2 class="text-2xl font-bold text-gray-900">
+                        Welcome to Senior Health Companion!
+                    </h2>
+                    <p class="text-sm text-gray-500">
+                        Today is {{ now.strftime('%A, %B %d, %Y') if now else datetime.now().strftime('%A, %B %d, %Y') }}
+                    </p>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div id="daily-tip" class="p-4 bg-yellow-50 rounded-md">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-lightbulb text-yellow-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-yellow-800">Daily Health Tip</h3>
+                            <div class="mt-2 text-sm text-yellow-700">
+                                <p id="tip-content">{{ daily_tip }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features section -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">What Senior Health Companion offers:</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-pills text-primary-600 mr-2"></i>
+                        <h4 class="font-medium">Medication Tracking</h4>
+                    </div>
+                    <p class="text-sm text-gray-600">Never miss a dose with our medication reminders and tracking system.</p>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-heart-pulse text-primary-600 mr-2"></i>
+                        <h4 class="font-medium">Health Monitoring</h4>
+                    </div>
+                    <p class="text-sm text-gray-600">Track your mood and pain levels to better understand your health patterns.</p>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-phone text-primary-600 mr-2"></i>
+                        <h4 class="font-medium">Emergency Contacts</h4>
+                    </div>
+                    <p class="text-sm text-gray-600">Keep your important contacts organized and easily accessible.</p>
+                </div>
+                <div class="border rounded-lg p-4">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-comments text-primary-600 mr-2"></i>
+                        <h4 class="font-medium">Health Assistant</h4>
+                    </div>
+                    <p class="text-sm text-gray-600">Get answers to health questions from our friendly AI assistant.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right sidebar -->
+    <div class="space-y-6">
+        <!-- Login panel -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">Ready to get started?</h3>
+            <p class="text-gray-600 mb-4">Sign in to access your personal health dashboard and all features.</p>
+            <a href="{{ url_for('login') }}" class="block w-full bg-primary-600 text-white text-center py-2 px-4 rounded-md hover:bg-primary-700">
+                Sign In with Google
+            </a>
+        </div>
+
+        <!-- Testimonials -->
+        <div class="bg-white shadow rounded-lg p-6">
+            <h3 class="text-lg font-medium text-gray-900 mb-4">What our users say</h3>
+            <div class="space-y-4">
+                <div class="border-l-4 border-primary-500 pl-4 py-2">
+                    <p class="text-sm text-gray-600 italic">"This app has helped me stay on track with all my medications. The reminders are a lifesaver!"</p>
+                    <p class="text-xs text-gray-500 mt-2">- Margaret, 72</p>
+                </div>
+                <div class="border-l-4 border-primary-500 pl-4 py-2">
+                    <p class="text-sm text-gray-600 italic">"I feel safer knowing my family can see my health status and that emergency contacts are just a click away."</p>
+                    <p class="text-xs text-gray-500 mt-2">- Robert, 68</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

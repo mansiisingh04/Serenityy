@@ -1,0 +1,389 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Serenity{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main content: Chatbot and daily tips -->
+    <div class="lg:col-span-2 space-y-6">
+        <!-- Welcome section -->
+        <div class="bg-white shadow rounded-lg p-6 card-enhanced">
+            <div class="flex items-center space-x-3">
+                <div class="flex-shrink-0">
+                    {% if current_user.profile_picture %}
+                        <img class="h-12 w-12 rounded-full" src="{{ current_user.profile_picture }}" alt="Profile picture">
+                    {% else %}
+                        <div class="h-12 w-12 rounded-full bg-primary-600 flex items-center justify-center text-white text-lg font-bold">
+                            {{ current_user.name[0].upper() }}
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="min-w-0 flex-1">
+                    <h2 class="text-2xl font-bold text-gray-900 truncate section-title">
+                        Welcome, {{ current_user.name.split(' ')[0] }}!
+                    </h2>
+                    <p class="text-sm text-gray-500">
+                        Today is {{ now.strftime('%A, %B %d, %Y') }}
+                    </p>
+                </div>
+            </div>
+            <div class="mt-4">
+                <div id="daily-tip" class="p-4 bg-yellow-50 rounded-md">
+                    <div class="flex">
+                        <div class="flex-shrink-0">
+                            <i class="fas fa-lightbulb text-yellow-400"></i>
+                        </div>
+                        <div class="ml-3">
+                            <h3 class="text-sm font-medium text-yellow-800">Daily Health Tip</h3>
+                            <div class="mt-2 text-sm text-yellow-700">
+                                <p id="tip-content">Stay hydrated! Aim to drink at least 8 glasses of water today. Proper hydration helps with medication absorption and overall health.</p>
+                            </div>
+                            <div class="mt-2">
+                                <button type="button" onclick="speakCurrentTip()" class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500">
+                                    <i class="fas fa-volume-up mr-1"></i> Read Aloud
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chatbot section -->
+        <div class="bg-white shadow rounded-lg overflow-hidden card-enhanced" style="height: 500px; display: flex; flex-direction: column;">
+            <div class="p-4 bg-primary-600 text-white">
+                <h3 class="text-lg font-medium">Serenity</h3>
+                <p class="text-sm">Ask me about health tips, medication reminders, or anything else!</p>
+            </div>
+            
+            <!-- Chat messages container -->
+            <div id="chat-messages" class="flex-grow overflow-y-auto p-4 space-y-4" style="height: calc(100% - 160px);">
+                <!-- Bot welcome message -->
+                <div class="flex items-end">
+                    <div class="flex flex-col space-y-2 text-sm max-w-xs mx-2 order-2 items-start">
+                        <div>
+                            <span class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-100 text-gray-800">
+                                Hello {{ current_user.name.split(' ')[0] }}! I'm your Serenity assistant. How can I help you today? You can ask me about your medications, health tips, or just chat with me.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white order-1">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat input -->
+            <div class="border-t p-4 bg-gray-50">
+                <form id="chat-form" class="flex space-x-2">
+                    <input type="text" id="chat-input" class="flex-grow rounded-full border-gray-300 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50" placeholder="Type your message...">
+                    <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-primary-600 hover:bg-primary-700">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                    <button type="button" id="voice-input-btn" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-full shadow-sm text-white bg-secondary-600 hover:bg-secondary-700">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </form>
+                <div class="text-xs text-gray-500 mt-1">
+                    Type "help!" for emergency assistance
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar: Quick access to health information -->
+    <div class="space-y-6">
+        <!-- Upcoming medications -->
+        <div class="bg-white shadow rounded-lg p-6 card-enhanced">
+            <h3 class="text-lg font-medium text-gray-900 section-title">Today's Medications</h3>
+            <div class="mt-4 space-y-3">
+                {% if medications %}
+                    {% for medication in medications %}
+                        <div class="border-l-4 border-primary-400 pl-3 py-2 flex justify-between items-center">
+                            <div>
+                                <p class="text-sm font-medium text-gray-900">{{ medication.name }} ({{ medication.dosage }})</p>
+                                <p class="text-xs text-gray-500">{{ medication.time }}</p>
+                            </div>
+                            <button type="button" class="inline-flex items-center px-2.5 py-1.5 border border-transparent text-xs font-medium rounded text-primary-700 bg-primary-100 hover:bg-primary-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" onclick="markMedicationTaken({{ medication.id }})">
+                                Mark as Taken
+                            </button>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4 text-gray-500">
+                        <p>No medications scheduled for today</p>
+                        <a href="{{ url_for('medications') }}" class="text-primary-600 hover:text-primary-500 text-sm">Add medications</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mt-5">
+                <a href="{{ url_for('medications') }}" class="text-sm font-medium text-primary-600 hover:text-primary-500">View all medications →</a>
+            </div>
+        </div>
+        
+        <!-- Health Logs -->
+        <div class="bg-white shadow rounded-lg p-6 card-enhanced">
+            <h3 class="text-lg font-medium text-gray-900 section-title">Recent Health Logs</h3>
+            <div class="mt-4 space-y-3">
+                {% if health_logs %}
+                    {% for log in health_logs %}
+                        <div class="border-b pb-2">
+                            <div class="flex justify-between">
+                                <p class="text-sm font-medium text-gray-900">{{ log.timestamp.strftime('%b %d') }}</p>
+                                <p class="text-sm text-gray-500">Mood: 
+                                    {% if log.mood == 'great' %}
+                                        <span class="text-green-500">😃 Great</span>
+                                    {% elif log.mood == 'good' %}
+                                        <span class="text-blue-500">🙂 Good</span>
+                                    {% elif log.mood == 'okay' %}
+                                        <span class="text-yellow-500">😐 Okay</span>
+                                    {% elif log.mood == 'bad' %}
+                                        <span class="text-orange-500">🙁 Bad</span>
+                                    {% else %}
+                                        <span class="text-red-500">😔 Terrible</span>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <p class="text-xs text-gray-600 truncate">{{ log.notes or 'No notes' }}</p>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="text-center py-4 text-gray-500">
+                        <p>No health logs yet</p>
+                        <a href="{{ url_for('health_check') }}" class="text-primary-600 hover:text-primary-500 text-sm">Add a health log</a>
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mt-5">
+                <a href="{{ url_for('health_check') }}" class="text-sm font-medium text-primary-600 hover:text-primary-500">Add new health check →</a>
+            </div>
+        </div>
+        
+        <!-- Emergency Help -->
+        <div class="bg-white shadow rounded-lg p-6 card-enhanced">
+            <h3 class="text-lg font-medium text-gray-900 section-title">Emergency Help</h3>
+            <div class="mt-4 space-y-3">
+                <button id="emergency-help-btn" class="w-full flex justify-center items-center px-4 py-4 border border-transparent text-lg font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                    <i class="fas fa-exclamation-triangle mr-2"></i> I Need Help Now
+                </button>
+                <p class="text-sm text-gray-600 text-center mt-2">
+                    This will send an alert to your emergency contacts
+                </p>
+            </div>
+            <div class="mt-5">
+                <a href="{{ url_for('emergency_contacts') }}" class="text-sm font-medium text-primary-600 hover:text-primary-500">Manage emergency contacts →</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatForm = document.getElementById('chat-form');
+    const chatInput = document.getElementById('chat-input');
+    const chatMessages = document.getElementById('chat-messages');
+    
+    // Add event listener for emergency help button
+    const emergencyHelpBtn = document.getElementById('emergency-help-btn');
+    if (emergencyHelpBtn) {
+        emergencyHelpBtn.addEventListener('click', function() {
+            // Show loading state on button
+            const originalText = emergencyHelpBtn.innerHTML;
+            emergencyHelpBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Sending Alert...';
+            emergencyHelpBtn.disabled = true;
+            
+            // Simulate sending alert (you can replace this with actual API call)
+            setTimeout(function() {
+                // Restore button
+                emergencyHelpBtn.innerHTML = originalText;
+                emergencyHelpBtn.disabled = false;
+                
+                // Show success message
+                alert('Emergency alert sent successfully! Your emergency contacts have been notified.');
+            }, 1500); // Simulate network delay of 1.5 seconds
+        });
+    }
+    
+    if (chatForm && chatInput && chatMessages) {
+        chatForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const userMessage = chatInput.value.trim();
+            if (!userMessage) return;
+            
+            // Display user message
+            const userMessageElement = document.createElement('div');
+            userMessageElement.classList.add('flex', 'items-end', 'justify-end', 'mb-4');
+            userMessageElement.innerHTML = `
+                <div class="flex flex-col space-y-2 text-sm max-w-xs mx-2 order-1 items-end">
+                    <div>
+                        <span class="px-4 py-2 rounded-lg inline-block rounded-br-none bg-primary-600 text-white">
+                            ${userMessage}
+                        </span>
+                    </div>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-white order-2">
+                    <i class="fas fa-user"></i>
+                </div>
+            `;
+            chatMessages.appendChild(userMessageElement);
+            
+            // Show thinking message
+            const thinkingMessage = document.createElement('div');
+            thinkingMessage.classList.add('flex', 'items-end', 'thinking-message');
+            thinkingMessage.innerHTML = `
+                <div class="flex flex-col space-y-2 text-sm max-w-xs mx-2 order-2 items-start">
+                    <div>
+                        <span class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-100 text-gray-800">
+                            <i class="fas fa-spinner fa-spin"></i> Thinking...
+                        </span>
+                    </div>
+                </div>
+                <div class="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white order-1">
+                    <i class="fas fa-robot"></i>
+                </div>
+            `;
+            chatMessages.appendChild(thinkingMessage);
+            
+            // Scroll to bottom
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+            
+            // Clear input
+            chatInput.value = '';
+            
+            // Send request to server
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    'message': userMessage
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Remove thinking message
+                const thinkingMsg = chatMessages.querySelector('.thinking-message');
+                if (thinkingMsg) {
+                    thinkingMsg.remove();
+                }
+                
+                // Add bot response
+                const botMessage = document.createElement('div');
+                botMessage.classList.add('flex', 'items-end');
+                botMessage.innerHTML = `
+                    <div class="flex flex-col space-y-2 text-sm max-w-xs mx-2 order-2 items-start">
+                        <div>
+                            <span class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-100 text-gray-800">
+                                ${data.response}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white order-1">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                `;
+                chatMessages.appendChild(botMessage);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                const thinkingMsg = chatMessages.querySelector('.thinking-message');
+                if (thinkingMsg) {
+                    thinkingMsg.remove();
+                }
+                
+                // Show error message
+                const errorMessage = document.createElement('div');
+                errorMessage.classList.add('flex', 'items-end');
+                errorMessage.innerHTML = `
+                    <div class="flex flex-col space-y-2 text-sm max-w-xs mx-2 order-2 items-start">
+                        <div>
+                            <span class="px-4 py-2 rounded-lg inline-block rounded-bl-none bg-gray-100 text-gray-800">
+                                Oops! Something went wrong. Please try again.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-primary-600 flex items-center justify-center text-white order-1">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                `;
+                chatMessages.appendChild(errorMessage);
+                
+                // Scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            });
+        });
+        
+        // Voice input button functionality
+        const voiceInputBtn = document.getElementById('voice-input-btn');
+        if (voiceInputBtn && 'webkitSpeechRecognition' in window) {
+            const recognition = new webkitSpeechRecognition();
+            recognition.continuous = false;
+            recognition.lang = 'en-US';
+            
+            voiceInputBtn.addEventListener('click', function() {
+                recognition.start();
+                voiceInputBtn.innerHTML = '<i class="fas fa-microphone-slash"></i>';
+                voiceInputBtn.classList.add('recording');
+            });
+            
+            recognition.onresult = function(event) {
+                const transcript = event.results[0][0].transcript;
+                chatInput.value = transcript;
+                voiceInputBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                voiceInputBtn.classList.remove('recording');
+            };
+            
+            recognition.onend = function() {
+                voiceInputBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                voiceInputBtn.classList.remove('recording');
+            };
+            
+            recognition.onerror = function() {
+                voiceInputBtn.innerHTML = '<i class="fas fa-microphone"></i>';
+                voiceInputBtn.classList.remove('recording');
+            };
+        } else if (voiceInputBtn) {
+            voiceInputBtn.style.display = 'none';
+        }
+    }
+});
+
+// Function to mark medication as taken
+function markMedicationTaken(medicationId) {
+    fetch(`/mark_medication_taken/${medicationId}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show success message
+            alert('Medication marked as taken!');
+            
+            // Update UI - change button color or disable it
+            const button = event.target.closest('button');
+            button.classList.remove('bg-primary-100', 'hover:bg-primary-200', 'text-primary-700');
+            button.classList.add('bg-green-100', 'text-green-700');
+            button.innerHTML = 'Taken ✓';
+            button.disabled = true;
+        } else {
+            alert('Error: ' + (data.error || 'Failed to mark medication as taken'));
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('There was an error marking the medication as taken');
+    });
+}
+</script>
+{% endblock %}

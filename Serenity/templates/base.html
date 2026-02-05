@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Serenity{% endblock %}</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+    <!-- Google Material Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+    <!-- TailwindCSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Custom theme configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            DEFAULT: '#FFB74D',
+                            50: '#FFF8E1',
+                            100: '#FFECB3',
+                            200: '#FFE082',
+                            300: '#FFD54F',
+                            400: '#FFB74D', /* Warm Amber */
+                            500: '#FFA726',
+                            600: '#FF9800',
+                            700: '#FB8C00',
+                            800: '#F57C00',
+                            900: '#EF6C00',
+                        },
+                        secondary: {
+                            DEFAULT: '#B39DDB',
+                            50: '#F3E5F5',
+                            100: '#E1BEE7',
+                            200: '#CE93D8',
+                            300: '#BA68C8',
+                            400: '#AB47BC',
+                            500: '#9C27B0',
+                            600: '#B39DDB', /* Calm Lavender */
+                            700: '#7B1FA2',
+                            800: '#6A1B9A',
+                            900: '#4A148C',
+                        },
+                        accent: '#EF9A9A', /* Soft Terracotta */
+                        background: '#FFF5EC', /* Soft Peach */
+                        card: '#FFFCF5', /* Ivory */
+                        text: {
+                            primary: '#2E2E2E', /* Deep Charcoal */
+                            muted: '#6D6D6D', /* Warm Gray */
+                        }
+                    },
+                    fontFamily: {
+                        'heading': ['Quicksand', 'sans-serif'],
+                        'body': ['Roboto', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom CSS */
+        @layer components {
+            .btn-primary {
+                @apply py-2 px-4 bg-primary-600 text-white font-semibold rounded-lg shadow-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-opacity-75 transition-colors duration-300;
+            }
+            .btn-secondary {
+                @apply py-2 px-4 bg-secondary-600 text-white font-semibold rounded-lg shadow-md hover:bg-secondary-700 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-opacity-75 transition-colors duration-300;
+            }
+            .input-field {
+                @apply mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-primary-300 focus:ring focus:ring-primary-200 focus:ring-opacity-50;
+            }
+
+            /* Background patterns */
+            .bg-pattern-health {
+                background-color: #FFF5EC;
+                background-image: 
+                    radial-gradient(circle at 25px 25px, rgba(255, 183, 77, 0.1) 2px, transparent 0),
+                    radial-gradient(circle at 75px 75px, rgba(179, 157, 219, 0.1) 2px, transparent 0),
+                    radial-gradient(circle at 50px 125px, rgba(239, 154, 154, 0.1) 3px, transparent 0);
+                background-size: 100px 100px;
+            }
+            
+            .bg-pattern-waves {
+                background: linear-gradient(to bottom, transparent 0%, transparent 50%, rgba(255, 183, 77, 0.05) 50%, rgba(255, 183, 77, 0.05) 100%);
+                background-size: 100% 20px;
+                position: relative;
+            }
+            
+            .bg-pattern-waves::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-image: 
+                    repeating-linear-gradient(45deg, rgba(179, 157, 219, 0.03) 0px, rgba(179, 157, 219, 0.03) 1px, transparent 1px, transparent 11px),
+                    repeating-linear-gradient(135deg, rgba(179, 157, 219, 0.03) 0px, rgba(179, 157, 219, 0.03) 1px, transparent 1px, transparent 11px);
+                z-index: -1;
+            }
+            
+            .bg-heartbeat {
+                position: relative;
+            }
+            
+            .bg-heartbeat::after {
+                content: "";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100' fill='none'%3E%3Cpath d='M50 87.5L43.75 81.875C20 60.625 5 47.1875 5 30.625C5 17.1875 15.625 6.25 28.75 6.25C36.25 6.25 43.75 9.6875 50 15.3125C56.25 9.6875 63.75 6.25 71.25 6.25C84.375 6.25 95 17.1875 95 30.625C95 47.1875 80 60.625 56.25 81.875L50 87.5Z' fill='rgba(255, 183, 77, 0.03)'/%3E%3C/svg%3E");
+                background-repeat: space;
+                background-size: 50px 50px;
+                pointer-events: none;
+                z-index: -1;
+            }
+
+            /* Enhanced card styling */
+            .card-enhanced {
+                @apply bg-white rounded-xl shadow-md overflow-hidden transition-all duration-300 border border-opacity-10 border-primary-200;
+                box-shadow: 0 10px 15px -3px rgba(255, 183, 77, 0.05), 0 4px 6px -2px rgba(255, 183, 77, 0.025);
+            }
+            
+            .card-enhanced:hover {
+                box-shadow: 0 15px 30px -5px rgba(255, 183, 77, 0.1), 0 10px 10px -5px rgba(255, 183, 77, 0.05);
+                transform: translateY(-2px);
+            }
+
+            /* Navbar enhancement */
+            .nav-link-enhanced {
+                @apply relative overflow-hidden;
+            }
+            
+            .nav-link-enhanced::after {
+                content: '';
+                position: absolute;
+                bottom: 0;
+                left: 50%;
+                width: 0;
+                height: 2px;
+                background-color: theme('colors.primary.500');
+                transition: all 0.3s ease-in-out;
+                transform: translateX(-50%);
+            }
+            
+            .nav-link-enhanced:hover::after {
+                width: 100%;
+            }
+            
+            /* Section titles with decorative elements */
+            .section-title {
+                @apply text-xl font-bold text-gray-900 mb-6 relative inline-block;
+            }
+            
+            .section-title::after {
+                content: '';
+                position: absolute;
+                left: 0;
+                bottom: -6px;
+                width: 40px;
+                height: 3px;
+                background-color: theme('colors.primary.500');
+                border-radius: 3px;
+            }
+            
+            /* Gradient background */
+            .bg-gradient-custom {
+                background: linear-gradient(135deg, #FFF8E1 0%, #FFF5EC 25%, #F3E5F5 75%, #E1BEE7 100%);
+                background-attachment: fixed;
+            }
+
+            /* Background image for all pages */
+            .bg-custom-image {
+                background-image: url('/static/images/bg.jpg');
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+                background-repeat: no-repeat;
+            }
+        }
+    </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body class="min-h-screen flex flex-col bg-custom-image font-['Quicksand']">
+    <!-- Header -->
+    <header class="bg-white shadow">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex">
+                    <div class="flex-shrink-0 flex items-center">
+                        <a href="/" class="text-2xl font-bold text-primary-600">
+                            <i class="fas fa-heart-pulse mr-2"></i>Serenity
+                        </a>
+                    </div>
+                </div>
+                <div class="hidden md:ml-6 md:flex md:space-x-8">
+                    <!-- Public links that don't require login -->
+                    <a href="/" class="nav-link-enhanced inline-flex items-center px-1 pt-1 border-b-2 {% if request.path == '/' %}border-primary-500 text-primary-700{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
+                        Public Dashboard
+                    </a>
+                    <a href="{{ url_for('login') }}" class="nav-link-enhanced inline-flex items-center px-1 pt-1 border-b-2 {% if request.path == url_for('login') %}border-primary-500 text-primary-700{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
+                        Sign In
+                    </a>
+                    
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('dashboard') }}" class="nav-link-enhanced inline-flex items-center px-1 pt-1 border-b-2 {% if request.path == url_for('dashboard') %}border-primary-500 text-primary-700{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
+                            Dashboard
+                        </a>
+                        <a href="{{ url_for('medications') }}" class="nav-link-enhanced inline-flex items-center px-1 pt-1 border-b-2 {% if request.path == url_for('medications') %}border-primary-500 text-primary-700{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
+                            Medications
+                        </a>
+                        <a href="{{ url_for('health_check') }}" class="nav-link-enhanced inline-flex items-center px-1 pt-1 border-b-2 {% if request.path == url_for('health_check') %}border-primary-500 text-primary-700{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
+                            Health Check
+                        </a>
+                        <a href="{{ url_for('emergency_contacts') }}" class="nav-link-enhanced inline-flex items-center px-1 pt-1 border-b-2 {% if request.path == url_for('emergency_contacts') %}border-primary-500 text-primary-700{% else %}border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700{% endif %}">
+                            Emergency Contacts
+                        </a>
+                    {% endif %}
+                </div>
+                <div class="flex items-center">
+                    {% if current_user.is_authenticated %}
+                        <div class="relative ml-3">
+                            <div>
+                                <button type="button" class="user-menu-button flex text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                                    {% if current_user.profile_picture %}
+                                        <img class="h-8 w-8 rounded-full" src="{{ current_user.profile_picture }}" alt="User profile">
+                                    {% else %}
+                                        <div class="h-8 w-8 rounded-full bg-primary-600 flex items-center justify-center text-white">
+                                            {{ current_user.name[0].upper() }}
+                                        </div>
+                                    {% endif %}
+                                </button>
+                            </div>
+                            <div class="user-menu origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                                <div class="block px-4 py-2 text-sm text-gray-700 border-b">
+                                    Signed in as<br>
+                                    <span class="font-medium">{{ current_user.name }}</span>
+                                </div>
+                                <a href="{{ url_for('logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{{ url_for('login') }}" class="btn-primary">Sign In</a>
+                    {% endif %}
+                </div>
+            </div>
+            <!-- Mobile menu -->
+            <div class="md:hidden">
+                <div class="pt-2 pb-3 space-y-1">
+                    {% if current_user.is_authenticated %}
+                        <a href="{{ url_for('dashboard') }}" class="block pl-3 pr-4 py-2 border-l-4 {% if request.path == url_for('dashboard') %}bg-primary-50 border-primary-500 text-primary-700{% else %}border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800{% endif %}">Dashboard</a>
+                        <a href="{{ url_for('medications') }}" class="block pl-3 pr-4 py-2 border-l-4 {% if request.path == url_for('medications') %}bg-primary-50 border-primary-500 text-primary-700{% else %}border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800{% endif %}">Medications</a>
+                        <a href="{{ url_for('health_check') }}" class="block pl-3 pr-4 py-2 border-l-4 {% if request.path == url_for('health_check') %}bg-primary-50 border-primary-500 text-primary-700{% else %}border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800{% endif %}">Health Check</a>
+                        <a href="{{ url_for('emergency_contacts') }}" class="block pl-3 pr-4 py-2 border-l-4 {% if request.path == url_for('emergency_contacts') %}bg-primary-50 border-primary-500 text-primary-700{% else %}border-transparent text-gray-600 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-800{% endif %}">Emergency Contacts</a>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main content -->
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="mb-4 {% if category == 'error' %}bg-red-100 border-l-4 border-red-500 text-red-700{% else %}bg-green-100 border-l-4 border-green-500 text-green-700{% endif %} p-4">
+                            <p>{{ message }}</p>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+            
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <!-- Chatbot UI -->
+    <button class="chatbot-toggler fixed bottom-8 right-8 z-20 bg-primary text-white h-14 w-14 flex items-center justify-center rounded-full">
+        <span class="material-symbols-outlined">chat</span>
+        <span class="material-symbols-outlined hidden">close</span>
+    </button>
+    <div class="chatbot fixed bottom-24 right-8 w-[350px] transform scale-0 origin-bottom-right transition-transform duration-300 bg-white rounded-lg overflow-hidden shadow-lg z-10">
+        <div class="chatbot-header bg-primary p-4 text-white flex items-center justify-between">
+            <h3 class="text-lg font-medium">Serenity Assistant</h3>
+            <span class="close-btn material-symbols-outlined cursor-pointer">close</span>
+        </div>
+        <ul class="chatbox p-4 h-[400px] overflow-y-auto"></ul>
+        <div class="chat-input border-t border-gray-200 p-3 flex items-center space-x-3">
+            <textarea placeholder="Enter a message..." class="w-full border rounded-lg p-2 resize-none" rows="1"></textarea>
+            <span class="material-symbols-outlined text-primary cursor-pointer">send</span>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white shadow mt-auto">
+        <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
+            <p class="text-center text-gray-500 text-sm">
+                &copy; 2025 Serenity. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Toggle user menu
+        document.querySelector('.user-menu-button')?.addEventListener('click', () => {
+            document.querySelector('.user-menu').classList.toggle('hidden');
+        });
+
+        // Close user menu when clicking elsewhere
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.user-menu-button')) {
+                document.querySelector('.user-menu')?.classList.add('hidden');
+            }
+        });
+
+        // Speech synthesis for accessibility
+        function speak(text) {
+            if ('speechSynthesis' in window) {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.rate = 0.9; // Slightly slower for better comprehension
+                utterance.pitch = 1;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/chatbot.js') }}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

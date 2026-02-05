@@ -1,0 +1,525 @@
+/* Custom styles for Senior Health Companion */
+
+/* Base font styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    color: #2E2E2E;
+    background-color: #FFF5EC;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+}
+
+/* Improved accessibility - larger text for seniors */
+.large-text {
+    font-size: 1.2rem;
+}
+
+.extra-large-text {
+    font-size: 1.5rem;
+}
+
+/* High contrast elements */
+.high-contrast {
+    color: #2E2E2E;
+    background-color: #FFFCF5;
+    border: 1px solid #2E2E2E;
+}
+
+/* Card styling */
+.card {
+    background-color: #FFFCF5;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Medication reminder animations */
+@keyframes pulse-reminder {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.reminder-pulse {
+    animation: pulse-reminder 2s infinite;
+}
+
+/* Emergency mode styling */
+.emergency-mode-bg {
+    background-color: #EF9A9A !important; /* Soft Terracotta */
+    transition: background-color 0.5s ease;
+}
+
+/* Voice input button styles */
+.listening {
+    background-color: #EF9A9A !important; /* Soft Terracotta */
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}
+
+/* Mood selection highlight */
+.mood-selected {
+    border-color: #FFB74D; /* Warm Amber */
+    background-color: rgba(255, 183, 77, 0.2); /* Warm Amber with opacity */
+    box-shadow: 0 0 0 3px rgba(255, 183, 77, 0.3);
+}
+
+/* Health progress bar */
+.health-progress {
+    height: 8px;
+    border-radius: 4px;
+    background-color: rgba(179, 157, 219, 0.3); /* Calm Lavender with opacity */
+}
+
+.health-progress-bar {
+    height: 100%;
+    border-radius: 4px;
+    background-color: #B39DDB; /* Calm Lavender */
+    transition: width 0.3s ease;
+}
+
+/* Chatbot typing indicator */
+.typing-indicator {
+    display: flex;
+    align-items: center;
+}
+
+.typing-indicator span {
+    height: 8px;
+    width: 8px;
+    margin: 0 2px;
+    background-color: #6D6D6D; /* Warm Gray */
+    border-radius: 50%;
+    display: inline-block;
+    opacity: 0.4;
+    animation: typing 1.5s infinite;
+}
+
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes typing {
+    0% { opacity: 0.4; transform: translateY(0); }
+    50% { opacity: 1; transform: translateY(-5px); }
+    100% { opacity: 0.4; transform: translateY(0); }
+}
+
+/* Enhanced styles for chatbot responses */
+.chatbox .incoming p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    color: #333;
+}
+
+.chatbox .incoming h2 {
+    font-size: 1.3rem;
+    color: #2c7fb8;
+    margin-top: 15px;
+    margin-bottom: 10px;
+}
+
+.chatbox .incoming ul, .chatbox .incoming ol {
+    padding-left: 20px;
+    margin-bottom: 12px;
+}
+
+.chatbox .incoming li {
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.chatbox .incoming strong, .chatbox .incoming b {
+    color: #2c7fb8;
+}
+
+.chatbox .incoming .health-tip {
+    background-color: #f0f7fc;
+    border-left: 4px solid #2c7fb8;
+    padding: 10px 15px;
+    margin: 10px 0;
+    border-radius: 0 5px 5px 0;
+}
+
+.chatbox .incoming .disclaimer {
+    background-color: #fff4e5;
+    border-left: 4px solid #ff9800;
+    padding: 10px 15px;
+    margin-top: 15px;
+    border-radius: 0 5px 5px 0;
+    font-size: 0.95rem;
+    font-style: italic;
+}
+
+/* Enhanced styles specifically for Health Checks */
+.health-check-container {
+    font-size: 1.25rem;
+    line-height: 1.7;
+    margin-bottom: 15px;
+}
+
+.health-check-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2c7fb8;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #e1f0fa;
+    padding-bottom: 8px;
+}
+
+.health-check-section {
+    margin-bottom: 20px;
+}
+
+.health-check-question {
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: #2c7fb8;
+    margin-bottom: 10px;
+}
+
+.health-check-description {
+    font-size: 1.2rem;
+    margin-bottom: 15px;
+}
+
+.health-check-reminder {
+    background-color: #fff4e5;
+    border-left: 4px solid #ff9800;
+    padding: 15px 20px;
+    margin: 20px 0;
+    border-radius: 0 5px 5px 0;
+    font-size: 1.15rem;
+}
+
+.health-check-reminder strong {
+    display: block;
+    font-size: 1.25rem;
+    margin-bottom: 8px;
+    color: #e65100;
+}
+
+/* Health Advice Styles for medical responses */
+.health-advice-container {
+    font-size: 1.3rem;
+    line-height: 1.8;
+    color: #333;
+    margin: 10px 0;
+    padding: 5px;
+}
+
+.health-advice-intro {
+    font-size: 1.35rem;
+    margin-bottom: 20px;
+    color: #333;
+    line-height: 1.7;
+}
+
+.health-advice-section {
+    margin-bottom: 25px;
+    border-left: 3px solid #b3e5fc;
+    padding-left: 15px;
+}
+
+.health-advice-heading {
+    font-size: 1.4rem;
+    color: #0277bd;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.health-advice-content {
+    padding-left: 5px;
+}
+
+.health-advice-list {
+    list-style-type: none;
+    padding-left: 5px;
+    margin: 15px 0;
+}
+
+.health-advice-list li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 15px;
+    font-size: 1.25rem;
+    color: #333;
+}
+
+.health-advice-list li:before {
+    content: "•";
+    position: absolute;
+    left: 5px;
+    color: #0277bd;
+    font-size: 1.5rem;
+}
+
+.health-advice-reminder {
+    background-color: #fff8e1;
+    border-left: 5px solid #ffb300;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 0 5px 5px 0;
+}
+
+.health-advice-reminder .reminder-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #e65100;
+    margin-bottom: 10px;
+}
+
+.health-advice-reminder .reminder-content {
+    font-size: 1.25rem;
+    line-height: 1.7;
+}
+
+/* Urgent health advice styling for medical attention warnings */
+.health-advice-urgent {
+    background-color: #ffebee;
+    border-left: 4px solid #ef5350 !important;
+    padding: 15px;
+    margin: 20px 0;
+    border-radius: 0 5px 5px 0;
+}
+
+.health-advice-urgent .health-advice-heading {
+    color: #c62828;
+    font-weight: 700;
+    font-size: 1.45rem;
+}
+
+.urgent-list li {
+    color: #c62828;
+    font-weight: 500;
+}
+
+.urgent-list li:before {
+    color: #c62828;
+    content: "!";
+    font-weight: bold;
+}
+
+/* Nutrition Advice Styling for food recommendations */
+.nutrition-advice-container {
+    font-size: 1.35rem;
+    line-height: 1.8;
+    color: #333;
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #fafeff;
+    border-radius: 8px;
+}
+
+.nutrition-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #00796b;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #b2dfdb;
+}
+
+.nutrition-section {
+    margin-bottom: 25px;
+    border-left: 4px solid #b2dfdb;
+    padding-left: 15px;
+}
+
+.nutrition-heading {
+    font-size: 1.4rem;
+    color: #00796b;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.nutrition-content {
+    padding-left: 10px;
+}
+
+.nutrition-list {
+    list-style-type: none;
+    padding-left: 5px;
+    margin: 15px 0;
+}
+
+.nutrition-list li {
+    position: relative;
+    padding-left: 30px;
+    margin-bottom: 15px;
+    font-size: 1.25rem;
+    color: #333;
+}
+
+.nutrition-list li:before {
+    content: "✓";
+    position: absolute;
+    left: 5px;
+    color: #00796b;
+    font-size: 1.2rem;
+}
+
+.nutrition-disclaimer {
+    background-color: #fff8e1;
+    border-left: 5px solid #ffb300;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 0 5px 5px 0;
+}
+
+.nutrition-disclaimer .disclaimer-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #e65100;
+    margin-bottom: 10px;
+}
+
+.nutrition-disclaimer .disclaimer-content {
+    font-size: 1.25rem;
+    line-height: 1.7;
+}
+
+/* Improved message formatting for the chatbot */
+.chatbox .incoming .message-content {
+    font-size: 1.15rem;
+    line-height: 1.6;
+}
+
+.chatbox .incoming .message-content p {
+    margin-bottom: 15px;
+    font-size: 1.15rem;
+}
+
+.chatbox .incoming .message-content ul {
+    margin: 15px 0;
+}
+
+.chatbox .incoming .message-content li {
+    margin-bottom: 10px;
+    padding-left: 5px;
+}
+
+/* Increase contrast for better readability */
+.chatbox .chat p {
+    white-space: pre-wrap;
+}
+
+/* Print styles - for medication schedules, etc. */
+@media print {
+    header, footer, .no-print {
+        display: none;
+    }
+    
+    body {
+        font-family: 'Roboto', sans-serif;
+        font-size: 14pt;
+        line-height: 1.3;
+        color: #2E2E2E;
+        background-color: white;
+    }
+    
+    .print-only {
+        display: block;
+    }
+    
+    .print-large {
+        font-size: 18pt;
+        font-weight: bold;
+        font-family: 'Quicksand', sans-serif;
+    }
+}
+
+/* Custom range input styling for better accessibility */
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 10px;
+    background: rgba(255, 183, 77, 0.3); /* Warm Amber with opacity */
+    border-radius: 5px;  
+    outline: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #FFB74D; /* Warm Amber */
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #FFB74D; /* Warm Amber */
+    cursor: pointer;
+    border-radius: 50%;
+    border: none;
+}
+
+/* Focus indicators for accessibility */
+a:focus, button:focus, input:focus, select:focus, textarea:focus {
+    outline: 2px solid rgba(255, 183, 77, 0.5); /* Warm Amber with opacity */
+    outline-offset: 2px;
+}
+
+/* Emergency button flashing effect */
+@keyframes flash {
+    0% { background-color: #EF9A9A; } /* Soft Terracotta */
+    50% { background-color: #E57373; } /* Darker Terracotta */
+    100% { background-color: #EF9A9A; } /* Soft Terracotta */
+}
+
+.emergency-flashing {
+    animation: flash 1s infinite;
+}
+
+/* Medication reminder badge */
+.reminder-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    padding: 2px 6px;
+    border-radius: 9999px;
+    background-color: #EF9A9A; /* Soft Terracotta */
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+}
+
+/* Button styling */
+.btn {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 500;
+}
+
+.btn-primary {
+    background-color: #FFB74D; /* Warm Amber */
+    color: #2E2E2E;
+}
+
+.btn-primary:hover {
+    background-color: #FFA726; /* Slightly darker Warm Amber */
+}
+
+.btn-secondary {
+    background-color: #B39DDB; /* Calm Lavender */
+    color: #2E2E2E;
+}
+
+.btn-secondary:hover {
+    background-color: #9575CD; /* Slightly darker Calm Lavender */
+}
